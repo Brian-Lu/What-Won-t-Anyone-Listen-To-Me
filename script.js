@@ -9,31 +9,46 @@ function getCursorPosition(canvas, event) {
     return ret;
 }
 
-var blop = function(e) {
-    var c = document.createElementNS(NS, "circle");
-    var line = document.createElementNS(NS, "line");
-    
-    var coor = getCursorPosition(svg, e);
+var DEATH = function(e) {
+//    e.stopPropagation();
+    svg.removeChild(this);
+    console.log("ANOTHER ONE BITES THE DUST");
+}
 
+var click_circ = function(e) {
+    e.stopPropagation();
+    this.setAttribute("fill","pink");
+    this.addEventListener("click", DEATH);
+    console.log("IRRITATED");
+}
+
+var draw_circ = function(e) {
+    svg.append(make_circ(e));
+    console.log("DRAW");
+}
+
+var make_circ = function(e) {
+    var c = document.createElementNS(NS, "circle");
+    var line = document.createElementNS(NS, "line");    
+    var coor = getCursorPosition(svg, e);
     c.setAttribute("fill","white");
     c.setAttribute("cx", coor[0]);
     c.setAttribute("cy", coor[1]);
     c.setAttribute("r", 20);
     c.setAttribute("stroke","grey");
     c.setAttribute("stroke-width",1);
-
-    svg.appendChild(c);
-    console.log(c);
+    c.addEventListener("click", click_circ);
+    return c;
 };
 
-svg.addEventListener("click", blop);
+svg.addEventListener("click", draw_circ);
 
 var clearbtn = document.getElementById("clear");
 clearbtn.addEventListener("click", function(e){
     while (svg.lastChild) {
 	svg.removeChild(svg.lastChild);
     }
-    console.log("clear");
+    console.log("ERADICATION");
 });
 
 var movebtn = document.getElementById("move");
