@@ -23,7 +23,7 @@ var click_circ = function(e) {
 }
 
 var draw_circ = function(e) {
-    svg.append(make_circ(e));
+    svg.appendChild(make_circ(e));
     console.log("DRAW");
 }
 
@@ -51,8 +51,12 @@ clearbtn.addEventListener("click", function(e){
     console.log("ERADICATION");
 });
 
+var move_circles = function(e) {
+    var listOfCircles = document.getElementsByTagName('circle');
+    for (i = 0; i < listOfCircles.length; i++){
+	console.log(listOfCircles[i]);
+    }
+};
+
 var movebtn = document.getElementById("move");
-movebtn.addEventListener("click", function(e){
-    console.log("move: under construction");
-}
-);
+movebtn.addEventListener("click", move_circles);
