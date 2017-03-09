@@ -13,6 +13,10 @@ var DEATH = function(e) {
 //    e.stopPropagation();
     svg.removeChild(this);
     console.log("ANOTHER ONE BITES THE DUST");
+    x = Math.floor(Math.random()*svg.getBoundingClientRect().width);
+    y = Math.floor(Math.random()*svg.getBoundingClientRect().height);
+    svg.appendChild(make_circ(x,y));
+    console.log("BIRTH");
 }
 
 var click_circ = function(e) {
@@ -23,17 +27,17 @@ var click_circ = function(e) {
 }
 
 var draw_circ = function(e) {
-    svg.appendChild(make_circ(e));
+    var coor = getCursorPosition(svg, e);
+    svg.appendChild(make_circ(coor[0],coor[1]));
     console.log("DRAW");
 }
 
-var make_circ = function(e) {
+var make_circ = function(x,y) {
     var c = document.createElementNS(NS, "circle");
     var line = document.createElementNS(NS, "line");    
-    var coor = getCursorPosition(svg, e);
+    c.setAttribute("cx", x);
+    c.setAttribute("cy", y);
     c.setAttribute("fill","white");
-    c.setAttribute("cx", coor[0]);
-    c.setAttribute("cy", coor[1]);
     c.setAttribute("r", 20);
     c.setAttribute("stroke","grey");
     c.setAttribute("stroke-width",1);
