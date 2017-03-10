@@ -15,12 +15,12 @@ function getCursorPosition(canvas, event) {
 };
 
 var DEATH = function(e) {
-//    e.stopPropagation();
+    e.stopPropagation();
     svg.removeChild(this);
     console.log("ANOTHER ONE BITES THE DUST");
     var x = Math.floor(Math.random()*w);
     var y = Math.floor(Math.random()*h);
-    var new_circ = make_circ(x, y);
+    var new_circ = make_circ(x, y, 1, 1, R);
     svg.appendChild(new_circ);
     console.log("REBIRTH");
 };
@@ -46,7 +46,6 @@ var make_circ = function(x, y, vx, vy, r) {
     c.setAttribute("cy", y);
     c.setAttribute("vx", vx);
     c.setAttribute("vy", vy);
-    c.setAttribute("r", r);
     c.setAttribute("fill", "white");
     c.setAttribute("r", r);
     c.setAttribute("stroke","grey");
@@ -62,6 +61,7 @@ var move = function(){
 
     var boiz = document.getElementsByTagName("circle");
     var move_all = function() {
+
 	for (var i = 0; i < boiz.length; i++) {
 	    var boi = boiz[i];
 
@@ -73,19 +73,20 @@ var move = function(){
 
 	    if (x < 0 || x > (w-r)) {
 		boi.setAttribute("vx", -1 * vx);
+
 		console.log("-X");
 	    }
 	    if (y < 0 || y > (h-r)) {
 		boi.setAttribute("vy", -1 * vy);
 		console.log("-Y");
 	    }
+	    
 	    boi.setAttribute("cx", x + vx);
 	    boi.setAttribute("cy", y + vy);
 	    
 	    console.log("("+x+","+y+")");
-
+	    rid = window.requestAnimationFrame(move);
 	};
-	rid = window.requestAnimationFrame(move);
     };
     move_all();
 }
