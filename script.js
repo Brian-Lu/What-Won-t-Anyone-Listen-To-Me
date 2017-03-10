@@ -1,6 +1,7 @@
 var svg = document.getElementById("svg");
 var NS = "http://www.w3.org/2000/svg";
 var move_circles = false;
+var r = 60; //radius
 
 function getCursorPosition(canvas, event) {
     var rect = canvas.getBoundingClientRect();
@@ -38,20 +39,22 @@ var DEATH = function(e) {
             else {
                 y += randy;
             }
-            if (x <= 0) {
+            if (x <= r) {
                 xdirection = false;
             }
-            if (x >= 640) {
+            if (x >= (640 - r)) {
                 xdirection = true;
             }
-            if (y <= 0) {
+            if (y <= r) {
                 ydirection = false;
             }
-            if (y >= 480) {
+            if (y >= (480 - r)) {
                 ydirection = true;
             }
 	    if (x == 320) {
+		console.log("I'M AT THE MIDDLE!");
 	    }
+	    console.log(x + " " + y);
         }
         window.requestAnimationFrame(move_circle1);
         new_circ.addEventListener("click", click_circ);
@@ -119,7 +122,7 @@ var make_circ = function(x,y) {
     c.setAttribute("cx", x);
     c.setAttribute("cy", y);
     c.setAttribute("fill","white");
-    c.setAttribute("r", 20);
+    c.setAttribute("r", r);
     c.setAttribute("stroke","grey");
     c.setAttribute("stroke-width",1);
     c.addEventListener("click", click_circ);
