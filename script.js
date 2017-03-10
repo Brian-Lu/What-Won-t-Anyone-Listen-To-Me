@@ -50,6 +50,8 @@ var DEATH = function(e) {
             if (y >= 480) {
                 ydirection = true;
             }
+	    if (x == 320) {
+	    }
         }
         window.requestAnimationFrame(move_circle1);
         new_circ.addEventListener("click", click_circ);
@@ -71,8 +73,8 @@ var draw_circ = function(e) {
     var new_circ = make_circ(coor[0], coor[1]);
     svg.appendChild(new_circ);
     console.log("DRAW");
-    var x = e.offsetX ;
-    var y = e.offsetY ;
+    var x = coor[0];
+    var y = coor[1];
     var xdirection = false;
     var ydirection = false;
     var randx = Math.random() * 2 + 1;
