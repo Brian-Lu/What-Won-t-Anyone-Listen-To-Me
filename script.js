@@ -27,10 +27,10 @@ var DEATH = function(e) {
             new_circ.setAttribute("cx", x);
             new_circ.setAttribute("cy", y);
             if (xdirection) {
-                x -= randx;
+                x -= randx / 2.5;
             }
             else {
-                x += randx;
+                x += randx / 2.5;
             }
             if (ydirection) {
                 y -= randy;
@@ -51,7 +51,8 @@ var DEATH = function(e) {
                 ydirection = true;
             }
         }
-        window.requestAnimationFrame(move_circle1)
+        window.requestAnimationFrame(move_circle1);
+        new_circ.addEventListener("click", click_circ);
     };
     move_circle1();
 
@@ -81,10 +82,10 @@ var draw_circ = function(e) {
             new_circ.setAttribute("cx", x);
             new_circ.setAttribute("cy", y);
             if (xdirection) {
-                x -= randx;
+                x -= randx / 2.5;
             }
             else {
-                x += randx;
+                x += randx / 2.5;
             }
             if (ydirection) {
                 y -= randy;
@@ -106,6 +107,7 @@ var draw_circ = function(e) {
             }
         }
         window.requestAnimationFrame(move_circle)
+        new_circ.addEventListener("click", click_circ);
     };
     move_circle();
 };
