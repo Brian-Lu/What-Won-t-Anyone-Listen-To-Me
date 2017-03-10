@@ -3,7 +3,8 @@ var w = svg.getAttribute("width");
 var h = svg.getAttribute("height");
 var NS = "http://www.w3.org/2000/svg";
 var move_circles = false;
-var r = 60; //radius
+var R = 60; //radius
+var rid;
 
 function getCursorPosition(canvas, event) {
     var rect = canvas.getBoundingClientRect();
@@ -21,49 +22,7 @@ var DEATH = function(e) {
     var y = Math.floor(Math.random()*h);
     var new_circ = make_circ(x, y);
     svg.appendChild(new_circ);
-    var xdirection = false;
-    var ydirection = false;
-    var randx = Math.random() * 2 + 1;
-    var randy = Math.random() * 2 + 1;
-    var move_circle1 = function() {
-        if(move_circles) {
-            new_circ.setAttribute("cx", x);
-            new_circ.setAttribute("cy", y);
-            if (xdirection) {
-                x -= randx / 2.5;
-            }
-            else {
-                x += randx / 2.5;
-            }
-            if (ydirection) {
-                y -= randy;
-            }
-            else {
-                y += randy;
-            }
-            if (x <= r) {
-                xdirection = false;
-            }
-            if (x >= (640 - r)) {
-                xdirection = true;
-            }
-            if (y <= r) {
-                ydirection = false;
-            }
-            if (y >= (480 - r)) {
-                ydirection = true;
-            }
-	    if (x == 320) {
-		console.log("I'M AT THE MIDDLE!");
-	    }
-	    console.log(x + " " + y);
-        }
-        window.requestAnimationFrame(move_circle1);
-        new_circ.addEventListener("click", click_circ);
-    };
-    move_circle1();
-
-    console.log("BIRTH");
+    console.log("REBIRTH");
 };
 
 var click_circ = function(e) {
@@ -75,58 +34,20 @@ var click_circ = function(e) {
 
 var draw_circ = function(e) {
     var coor = getCursorPosition(svg, e);
-    var new_circ = make_circ(coor[0], coor[1]);
+    // could change v args to rand
+    var new_circ = make_circ(coor[0], coor[1], 1, 1, R);
     svg.appendChild(new_circ);
     console.log("DRAW");
-    var x = coor[0];
-    var y = coor[1];
-    var xdirection = false;
-    var ydirection = false;
-    var randx = Math.random() * 2 + 1;
-    var randy = Math.random() * 2 + 1;
-    var move_circle = function() {
-        if(move_circles) {
-            new_circ.setAttribute("cx", x);
-            new_circ.setAttribute("cy", y);
-            if (xdirection) {
-                x -= randx / 2.5;
-            }
-            else {
-                x += randx / 2.5;
-            }
-            if (ydirection) {
-                y -= randy;
-            }
-            else {
-                y += randy;
-            }
-            if (x <= r) {
-                xdirection = false;
-            }
-            if (x >= (640 - r)) {
-                xdirection = true;
-            }
-            if (y <= r) {
-                ydirection = false;
-            }
-            if (y >= (480 - r)) {
-                ydirection = true;
-            }
-	    if (Math.round(x) == w/2 ) {
-		console.log("I'M AT THE MIDDLE!");
-	    }
-        }
-        window.requestAnimationFrame(move_circle)
-        new_circ.addEventListener("click", click_circ);
-    };
-    move_circle();
 };
 
-var make_circ = function(x,y) {
+var make_circ = function(x, y, vx, vy, r) {
     var c = document.createElementNS(NS, "circle");
     c.setAttribute("cx", x);
     c.setAttribute("cy", y);
-    c.setAttribute("fill","white");
+    c.setAttribute("vx", vx);
+    c.setAttribute("vy", vy);
+    c.setAttribute("r", r);
+    c.setAttribute("fill", "white");
     c.setAttribute("r", r);
     c.setAttribute("stroke","grey");
     c.setAttribute("stroke-width",1);
@@ -134,20 +55,52 @@ var make_circ = function(x,y) {
     return c;
 };
 
+var move = function(){
+    console.log("MOVE");
+    
+    window.cancelAnimationFrame(rid);
+
+    var boiz = document.getElementsByTagName("circle");
+    var move_all = function() {
+	for (var i = 0; i < boiz.length; i++) {
+	    var boi = boiz[i];
+
+	    var x = parseInt(boi.getAttribute("cx"));
+	    var y = parseInt(boi.getAttribute("cy"));
+	    var vx = parseInt(boi.getAttribute("vx"));
+	    var vy = parseInt(boi.getAttribute("vy"));
+	    var r = parseInt(boi.getAttribute("r"));
+
+	    if (x < 0 || x > (w-r)) {
+		boi.setAttribute("vx", -1 * vx);
+		console.log("-X");
+	    }
+	    if (y < 0 || y > (h-r)) {
+		boi.setAttribute("vy", -1 * vy);
+		console.log("-Y");
+	    }
+	    boi.setAttribute("cx", x + vx);
+	    boi.setAttribute("cy", y + vy);
+	    
+	    console.log("("+x+","+y+")");
+
+	};
+	rid = window.requestAnimationFrame(move);
+    };
+    move_all();
+}
+
 svg.addEventListener("click", draw_circ);
 
 var clearbtn = document.getElementById("clear");
 clearbtn.addEventListener("click", function(e){
+    window.cancelAnimationFrame(rid);
     while (svg.lastChild) {
 	svg.removeChild(svg.lastChild);
     }
+
     console.log("ERADICATION");
-    move_circles = false;
 });
 
-var get_jiggy_with_it = function(e) {
-    move_circles = true;
-};
-
 var movebtn = document.getElementById("move");
-movebtn.addEventListener("click", get_jiggy_with_it);
+movebtn.addEventListener("click", move);
