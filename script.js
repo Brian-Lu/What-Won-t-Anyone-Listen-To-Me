@@ -1,4 +1,6 @@
 var svg = document.getElementById("svg");
+var w = svg.getAttribute("width");
+var h = svg.getAttribute("height");
 var NS = "http://www.w3.org/2000/svg";
 var move_circles = false;
 var r = 60; //radius
@@ -15,8 +17,8 @@ var DEATH = function(e) {
 //    e.stopPropagation();
     svg.removeChild(this);
     console.log("ANOTHER ONE BITES THE DUST");
-    var x = Math.floor(Math.random()*svg.getBoundingClientRect().width);
-    var y = Math.floor(Math.random()*svg.getBoundingClientRect().height);
+    var x = Math.floor(Math.random()*w);
+    var y = Math.floor(Math.random()*h);
     var new_circ = make_circ(x, y);
     svg.appendChild(new_circ);
     var xdirection = false;
@@ -98,18 +100,21 @@ var draw_circ = function(e) {
             else {
                 y += randy;
             }
-            if (x <= 0) {
+            if (x <= r) {
                 xdirection = false;
             }
-            if (x >= 640) {
+            if (x >= (640 - r)) {
                 xdirection = true;
             }
-            if (y <= 0) {
+            if (y <= r) {
                 ydirection = false;
             }
-            if (y >= 480) {
+            if (y >= (480 - r)) {
                 ydirection = true;
             }
+	    if (Math.round(x) == w/2 ) {
+		console.log("I'M AT THE MIDDLE!");
+	    }
         }
         window.requestAnimationFrame(move_circle)
         new_circ.addEventListener("click", click_circ);
