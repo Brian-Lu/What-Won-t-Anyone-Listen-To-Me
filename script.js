@@ -3,7 +3,7 @@ var w = svg.getAttribute("width");
 var h = svg.getAttribute("height");
 var NS = "http://www.w3.org/2000/svg";
 var move_circles = false;
-var R = 60; //radius
+var R = 40; //radius
 var rid;
 
 function getCursorPosition(canvas, event) {
@@ -14,12 +14,16 @@ function getCursorPosition(canvas, event) {
     return ret;
 };
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 var DEATH = function(e) {
     e.stopPropagation();
     svg.removeChild(this);
     console.log("ANOTHER ONE BITES THE DUST");
-    var x = Math.floor(Math.random()* (w - 2*R));
-    var y = Math.floor(Math.random()* (h - 2*R));
+    var x = getRandomInt(R + 1, w - R);
+    var y = getRandomInt(R + 1, h - R);
     var new_circ = make_circ(x, y, 1, 1, R);
     svg.appendChild(new_circ);
     console.log("REBIRTH: "+x+" "+y);
