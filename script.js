@@ -18,11 +18,11 @@ var DEATH = function(e) {
     e.stopPropagation();
     svg.removeChild(this);
     console.log("ANOTHER ONE BITES THE DUST");
-    var x = Math.floor(Math.random()*w);
-    var y = Math.floor(Math.random()*h);
+    var x = Math.floor(Math.random()* (w - 2*R));
+    var y = Math.floor(Math.random()* (h - 2*R));
     var new_circ = make_circ(x, y, 1, 1, R);
     svg.appendChild(new_circ);
-    console.log("REBIRTH");
+    console.log("REBIRTH: "+x+" "+y);
 };
 
 var click_circ = function(e) {
@@ -71,22 +71,20 @@ var move = function(){
 	    var vy = parseInt(boi.getAttribute("vy"));
 	    var r = parseInt(boi.getAttribute("r"));
 
-	    if (x < 0 || x > (w-r)) {
+	    if (x-r < 0 || x > (w-r)) {
 		boi.setAttribute("vx", -1 * vx);
 
 		console.log("-X");
 	    }
-	    if (y < 0 || y > (h-r)) {
+	    if (y-r < 0 || y > (h-r)) {
 		boi.setAttribute("vy", -1 * vy);
 		console.log("-Y");
 	    }
+	    boi.setAttribute("cx", x + parseInt(boi.getAttribute("vx")));
+	    boi.setAttribute("cy", y + parseInt(boi.getAttribute("vy")));
 	    
-	    boi.setAttribute("cx", x + vx);
-	    boi.setAttribute("cy", y + vy);
-	    
-	    console.log("("+x+","+y+")");
-	    rid = window.requestAnimationFrame(move);
-	};
+	}   
+	rid = window.requestAnimationFrame(move);
     };
     move_all();
 }
