@@ -58,9 +58,7 @@ var make_circ = function(x, y, vx, vy, r) {
     return c;
 };
 
-var move = function(){
-    console.log("MOVE");
-    
+var move = function(){    
     window.cancelAnimationFrame(rid);
 
     var boiz = document.getElementsByTagName("circle");
@@ -71,22 +69,34 @@ var move = function(){
 
 	    var x = parseInt(boi.getAttribute("cx"));
 	    var y = parseInt(boi.getAttribute("cy"));
+	    var r = parseInt(boi.getAttribute("r"));
+	    if (r <= 1){
+		svg.removeChild(boi);
+		console.log("MICRODEATH");
+	    }
 	    var vx = parseInt(boi.getAttribute("vx"));
 	    var vy = parseInt(boi.getAttribute("vy"));
-	    var r = parseInt(boi.getAttribute("r"));
-
+		
 	    if (x-r < 0 || x > (w-r)) {
 		boi.setAttribute("vx", -1 * vx);
-
-		console.log("-X");
 	    }
 	    if (y-r < 0 || y > (h-r)) {
 		boi.setAttribute("vy", -1 * vy);
-		console.log("-Y");
 	    }
 	    boi.setAttribute("cx", x + parseInt(boi.getAttribute("vx")));
 	    boi.setAttribute("cy", y + parseInt(boi.getAttribute("vy")));
-	    
+
+	    if (boi.getAttribute("cx") == w / 2) {
+		boi.setAttribute("r", r / 2);
+		svg.appendChild(
+		    make_circ(parseInt(boi.getAttribute("cx")),
+				parseInt(boi.getAttribute("cy")),
+				parseInt(boi.getAttribute("vx") * -1),
+				parseInt(boi.getAttribute("vy") * -1),
+				parseInt(boi.getAttribute("r"))
+			     ));
+		console.log("M I T O S I S");
+	    }
 	}   
 	rid = window.requestAnimationFrame(move);
     };
